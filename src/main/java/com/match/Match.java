@@ -1,6 +1,6 @@
-package packages.match;
+package com.match;
 
-import packages.team.Team;
+import com.team.Team;
 
 public class Match {
     public Match(Team homeTeam, Team awayTeam) {}

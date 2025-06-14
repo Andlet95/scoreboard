@@ -1,6 +1,6 @@
-package packages.scoreboard;
+package com.scoreboard;
 
-import packages.match.Match;
+import com.match.Match;
 
 public class Scoreboard {
     void addMatch(Match match) {}

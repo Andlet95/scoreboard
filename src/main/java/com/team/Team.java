@@ -1,4 +1,4 @@
-package packages.team;
+package com.team;
 
 public class Team {
     public Team(String name) {}
