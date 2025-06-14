@@ -1,14 +1,14 @@
 package com.scoreboard;
 
 import com.match.Match;
+import java.util.List;
 
 public class Scoreboard {
     void addMatch(Match match) {}
 
-    void endMatch(int id) {}
+    void endMatch(Match match) {}
 
-    String[] getMatches() {
-        String[] list = {""};
-        return list;
+    List<String> getMatches() {
+        return List.of();
     }
 }
