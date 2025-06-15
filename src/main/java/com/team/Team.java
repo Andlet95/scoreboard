@@ -1,15 +1,21 @@
 package com.team;
 
 public class Team {
-    public Team(String name) {}
+    String name;
+    int score = 0;
+    public Team(String name) {
+        this.name = name;
+    }
 
-    public void setScore(int score) {}
+    public void setScore(int score) {
+        this.score = score;
+    }
 
     public int getScore() {
-        return 0;
+        return score;
     }
 
     public String getName() {
-        return "";
+        return name;
     }
 }
