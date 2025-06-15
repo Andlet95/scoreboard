@@ -1,4 +1,7 @@
-Requirements:
+To build/compile this project, I've used maven.
+
+
+Task requirements:
 
 Scoreboard can create a new match by taking two teams (homeTeam, awayTeam).
 Match scores can be updated (homeScore, awayScore).
@@ -27,3 +30,8 @@ not to do this, because it seemed like implementing the comparator logic and kee
 Match should be greater than another seemed confusing. The comparator could determine "excitement"
 of a match, which would means the list would have to be sorted in reverse before scoreboard returns
 it. Or it could be sorted some other way.
+
+After getting to the implementation of the sorting of matches, I determined having the Match
+implementing a Comparable seemed simplest, so I pivoted slightly away from the original idea. This
+led to a pain in testing the sorting function in the Scoreboard test, but I ended up adding the
+example from the task as an integration test.
