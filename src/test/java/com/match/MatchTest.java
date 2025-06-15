@@ -1,9 +1,13 @@
 package com.match;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 import com.team.Team;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -21,6 +25,24 @@ class MatchTest {
     }
 
     @Test
+    void MatchIdIncrementsForEachNewMatch() {
+        int offset = match.getId();
+        assertEquals(0 + offset, match.getId());
+        match = new Match(homeTeam, awayTeam);
+        assertEquals(1 + offset, match.getId());
+        match = new Match(homeTeam, awayTeam);
+        assertEquals(2 + offset, match.getId());
+        match = new Match(homeTeam, awayTeam);
+        assertEquals(3 + offset, match.getId());
+        match = new Match(homeTeam, awayTeam);
+        assertEquals(4 + offset, match.getId());
+        for (int i = 0; i < (1000 - 4); i++) {
+            match = new Match(homeTeam, awayTeam);
+        }
+        assertEquals(1000 + offset, match.getId());
+    }
+
+    @Test
     void getHomeScoreReflectsHomeTeamScore() {
         when(homeTeam.getScore()).thenReturn(0);
         assertEquals(0, match.getHomeScore());
@@ -35,13 +57,13 @@ class MatchTest {
     @Test
     void getAwayScoreReflectsAwayTeamScore() {
         when(awayTeam.getScore()).thenReturn(0);
-        assertEquals(0, match.getHomeScore());
+        assertEquals(0, match.getAwayScore());
         when(awayTeam.getScore()).thenReturn(5);
-        assertEquals(5, match.getHomeScore());
+        assertEquals(5, match.getAwayScore());
         when(awayTeam.getScore()).thenReturn(99999999);
-        assertEquals(99999999, match.getHomeScore());
+        assertEquals(99999999, match.getAwayScore());
         when(awayTeam.getScore()).thenReturn(-100);
-        assertEquals(-100, match.getHomeScore());
+        assertEquals(-100, match.getAwayScore());
     }
 
     @Test
@@ -69,23 +91,6 @@ class MatchTest {
         when(homeTeam.getScore()).thenReturn(1000);
         when(awayTeam.getScore()).thenReturn(10);
         assertEquals(1010, match.getTotalScore());
-    }
-
-    @Test
-    void MatchIdIncrementsForEachNewMatch() {
-        assertEquals(0, match.getId());
-        match = new Match(homeTeam, awayTeam);
-        assertEquals(1, match.getId());
-        match = new Match(homeTeam, awayTeam);
-        assertEquals(2, match.getId());
-        match = new Match(homeTeam, awayTeam);
-        assertEquals(3, match.getId());
-        match = new Match(homeTeam, awayTeam);
-        assertEquals(4, match.getId());
-        for (int i = 0; i < (1000 - 4); i++) {
-            match = new Match(homeTeam, awayTeam);
-        }
-        assertEquals(1000, match.getId());
     }
 
     @Test
@@ -117,5 +122,33 @@ class MatchTest {
         match.setScore(999999999, -999999999);
         verify(homeTeam).setScore(999999999);
         verify(awayTeam).setScore(-999999999);
+    }
+
+    @Test
+    void matchWithHigherTotalScoreIsGreaterThanMatchWithLowerTotalScore() {
+        when(homeTeam.getScore()).thenReturn(10);
+        when(awayTeam.getScore()).thenReturn(5);
+
+        Team smallMatchHomeTeam = mock();
+        Team smallMatchAwayTeam = mock();
+        when(smallMatchHomeTeam.getScore()).thenReturn(5);
+        when(smallMatchAwayTeam.getScore()).thenReturn(1);
+        Match smallerMatch = new Match(smallMatchHomeTeam, smallMatchHomeTeam);
+
+        assertTrue(match.compareTo(smallerMatch) > 0);
+    }
+
+    @Test
+    void matchWithEqualScoreButLowerIdIsLessThanMatchWithHigherId() {
+        when(homeTeam.getScore()).thenReturn(0);
+        when(awayTeam.getScore()).thenReturn(0);
+
+        Team recentMatchHomeTeam = mock();
+        Team recentMatchAwayTeam = mock();
+        when(recentMatchHomeTeam.getScore()).thenReturn(0);
+        when(recentMatchAwayTeam.getScore()).thenReturn(0);
+        Match moreRecentMatch = new Match(recentMatchHomeTeam, recentMatchAwayTeam);
+
+        assertTrue(match.compareTo(moreRecentMatch) < 0);
     }
 }
