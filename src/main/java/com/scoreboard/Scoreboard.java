@@ -30,4 +30,16 @@ public class Scoreboard {
         }
         return stringList;
     }
+
+    public int getTeamScore(String team) {
+        for (Match match : matches) {
+            if (match.getAwayTeam().getName() == team) {
+                return match.getAwayTeam().getScore();
+            }
+            if (match.getHomeTeam().getName() == team) {
+                return match.getHomeTeam().getScore();
+            }
+        }
+        throw new RuntimeException("Could not find team: " + team);
+    }
 }

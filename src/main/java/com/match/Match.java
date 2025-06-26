@@ -42,6 +42,14 @@ public class Match implements Comparable<Match> {
         return matchString;
     }
 
+    public Team getHomeTeam() {
+        return homeTeam;
+    }
+
+    public Team getAwayTeam() {
+        return awayTeam;
+    }
+
     @Override
     public int compareTo(Match match) {
         int comparison = Integer.compare(this.getTotalScore(), match.getTotalScore());

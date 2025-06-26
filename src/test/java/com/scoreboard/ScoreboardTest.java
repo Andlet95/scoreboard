@@ -2,6 +2,7 @@ package com.scoreboard;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
@@ -68,7 +69,37 @@ class ScoreboardIntegrationTest {
 
         assertIterableEquals(expected, scoreboard.getMatches());
     }
+
+    @Test
+    void gettingExistingTeamScoreCollectsScoreOfRelevantTeam() {
+        Team mexico = new Team("Mexico");
+        Team canada = new Team("Canada");
+        Team spain = new Team("Spain");
+        Team brazil = new Team("Brazil");
+
+        Match firstMatch = new Match(mexico, canada);
+        Match secondMatch = new Match(spain, brazil);
+
+        Scoreboard scoreboard = new Scoreboard();
+
+        scoreboard.addMatch(firstMatch);
+        scoreboard.addMatch(secondMatch);
+
+        canada.setScore(8);
+        mexico.setScore(5);
+
+        assertEquals(8, scoreboard.getTeamScore("Canada"));
+        assertEquals(5, scoreboard.getTeamScore("Mexico"));
+    }
+
+    @Test
+    void gettingNonExistantTeamThrowsException() {
+        Scoreboard scoreboard = new Scoreboard();
+
+        assertThrows(RuntimeException.class, () -> scoreboard.getTeamScore("USA"));
+    }
 }
+
 class ScoreboardTest {
     Scoreboard scoreboard;
     @Mock Match match0;
